@@ -19,6 +19,11 @@ player.loop_playlist = 'inf'
 # Option access, in general these require the core to reinitialize
 player['vo'] = 'gpu'
 
+
+@player.on_key_press('n')
+def next_video():
+    player.playlist_next()
+
 @player.on_key_press('q')
 def my_q_binding():
     print('THERE IS NO ESCAPE')
@@ -28,7 +33,10 @@ def my_s_binding():
     pillow_img = player.screenshot_raw()
     pillow_img.save('screenshot.png')
 
-player.play('../tierras/pampa1.mp4')
+videos = ['../tierras/pampa1.mp4',"../tierras/pampa2.mp4"]
+for video in videos:
+    player.playlist_append(video)
+player.playlist_pos=0
 player.wait_for_playback()
 player.wait_for_property('idle-active')
 del player
