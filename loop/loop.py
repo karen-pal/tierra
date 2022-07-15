@@ -24,6 +24,11 @@ player['vo'] = 'gpu'
 def next_video():
     player.playlist_next()
 
+@player.on_key_press('p')
+def wtf_seek():
+    print("SEEK")
+    player.seek(2)
+
 @player.on_key_press('q')
 def my_q_binding():
     print('THERE IS NO ESCAPE')
@@ -33,7 +38,7 @@ def my_s_binding():
     pillow_img = player.screenshot_raw()
     pillow_img.save('screenshot.png')
 
-videos = ['../tierras/pampa1.mp4',"../tierras/pampa2.mp4"]
+videos = ["/home/rgbellion/Videos/simplescreenrecorder3.mp4",'../tierras/pampa1.mp4',"../tierras/pampa2.mp4"]
 for video in videos:
     player.playlist_append(video)
 player.playlist_pos=0
