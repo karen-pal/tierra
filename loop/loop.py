@@ -11,8 +11,11 @@ player = mpv.MPV(log_handler=my_log, ytdl=False, input_default_bindings=True, in
 def time_observer(_name, value):
     # Here, _value is either None if nothing is playing or a float containing
     # fractional seconds since the beginning of the file.
-    if value:
-        print('Now playing at {:.2f}s'.format(value))
+    print(round(value))
+    if round(value) == soft_tejido["time"]:
+        player.playlist_append(soft_tejido["file"])
+        player.playlist_next()
+        player.playlist_remove(soft_tejido["file"])
 
 player.fullscreen = False
 player.loop_playlist = 'inf'
@@ -22,25 +25,33 @@ player['vo'] = 'gpu'
 
 @player.on_key_press('n')
 def next_video():
-    player.playlist_next()
+    print(round(player.time_pos))
+    if round(player.time_pos) == soft_tejido["time"] :
+        player.playlist_append(soft_tejido["file"])
+        player.playlist_next()
+        player.playlist_remove(soft_tejido["file"])
+        player.seek(13)
+    else:
+        player.playlist_append(soft_tejido["file"])
 
 @player.on_key_press('p')
 def wtf_seek():
     print("SEEK")
-    player.seek(2)
+    player.seek(-2)
 
-@player.on_key_press('q')
-def my_q_binding():
-    print('THERE IS NO ESCAPE')
 
 @player.on_key_press('s')
 def my_s_binding():
     pillow_img = player.screenshot_raw()
     pillow_img.save('screenshot.png')
 
-videos = ["/home/rgbellion/Videos/simplescreenrecorder3.mp4",'../tierras/pampa1.mp4',"../tierras/pampa2.mp4"]
+#videos = ["/home/rgbellion/Videos/simplescreenrecorder3.mp4",'../tierras/pampa1.mp4',"../tierras/pampa2.mp4"]
+
+soft_tejido = {"time":13,"file":"videos/soft.mp4"}
+tejido = {"file":"videos/hydra_short.mp4", "spawns":soft_tejido}
+videos = [tejido]
 for video in videos:
-    player.playlist_append(video)
+    player.playlist_append(video["file"])
 player.playlist_pos=0
 player.wait_for_playback()
 player.wait_for_property('idle-active')
